@@ -1,4 +1,7 @@
-require('dotenv').config()
+console.log(`Starting Server: ${process.env.NODE_ENV}`)
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 const express = require("express");
 const session = require('express-session');
 const http = require("http");
