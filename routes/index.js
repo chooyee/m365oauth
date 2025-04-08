@@ -18,7 +18,7 @@ console.log("CLIENT_ID:", clientId);
 const clientSecret = process.env.CLIENT_SECRET;
 console.log("CLIENT_SECRET:", clientSecret);
 
-const redirectUri = process.env.REDIRECT_URI;
+const redirectUri =  process.env.REDIRECT_URI;
 console.log("REDIRECT_URI:", redirectUri);
 
 const scopes = process.env.GRAPH_SCOPES;
@@ -52,10 +52,16 @@ router.get('/login', (req, res) => {
         const state = crypto.randomBytes(16).toString('hex');
         req.session.oauthState = state; // Store state in session
 
+        const hostname =
+        process.env.NODE_ENV === "development"
+          ? `${req.protocol}://${req.header("host")}`
+          : `${req.protocol}://${req.hostname}`;
+        const fullRedirectUri = hostname + redirectUri
+        console.log(fullRedirectUri)
         const authorizationParams = new URLSearchParams({
             client_id: clientId,
             response_type: 'code',
-            redirect_uri: redirectUri,
+            redirect_uri: fullRedirectUri ,
             scope: scopes,
             response_mode: 'query', // code will be in query params
             state: state // Include state in the request
@@ -88,13 +94,20 @@ router.get('/auth/callback', async (req, res) => {
     if (!code) {
         return res.status(400).send("Authorization code is missing.");
     }
+   
+    const hostname =
+       process.env.NODE_ENV === "development"
+            ? `${req.protocol}://${req.header("host")}`
+            : `${req.protocol}://${req.hostname}`;
+    const fullRedirectUri = hostname + redirectUri
 
+    console.log(fullRedirectUri)
     // 3. Exchange authorization code for tokens
     const tokenRequestParams = new URLSearchParams({
         client_id: clientId,
         scope: scopes, // Scopes should match the initial request
         code: code,
-        redirect_uri: redirectUri, // Must exactly match the one used in the auth request and registration
+        redirect_uri: fullRedirectUri, // Must exactly match the one used in the auth request and registration
         grant_type: 'authorization_code',
         client_secret: clientSecret,
     });
