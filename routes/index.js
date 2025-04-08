@@ -130,7 +130,12 @@ router.get('/profile', ensureAuthenticated, async (req, res) => {
                 'Authorization': `Bearer ${req.session.accessToken}`
             }
         });
-        res.send(`<h1>Welcome <span class="math-inline">${userProfileResponse.data.displayName} || ${userProfileResponse.data.userPrincipalName}</h1> <pre></span>${JSON.stringify(userProfileResponse.data, null, 2)}</pre> <a href="/read-email">Read Email</a> | <a href="/logout">Logout</a>`);
+        const signin_username = userProfileResponse.data.displayName;
+        const signedin = true;
+        const avatar = "";
+        const nickname = userProfileResponse.data.displayName;
+        res.render("chat",{ anonuserid:signin_username, signin_username:signin_username, signedin:signedin, avatar:avatar, nickname:nickname});
+        //res.send(`<h1>Welcome <span class="math-inline">${userProfileResponse.data.displayName} || ${userProfileResponse.data.userPrincipalName}</h1> <pre></span>${JSON.stringify(userProfileResponse.data, null, 2)}</pre> <a href="/read-email">Read Email</a> | <a href="/logout">Logout</a>`);
     } catch (err) {
         console.error("Error fetching user profile:", err.response ? err.response.data : err.message);
         res.status(500).send(`Error fetching profile: ${err.response ? JSON.stringify(err.response.data) : err.message}`);
