@@ -10,10 +10,19 @@ const crypto = require('crypto'); // For generating state
 
 // --- Configuration ---
 const tenantId = process.env.TENANT_ID;
+console.log("TENANT_ID:", tenantId);
+
 const clientId = process.env.CLIENT_ID;
+console.log("CLIENT_ID:", clientId);
+
 const clientSecret = process.env.CLIENT_SECRET;
+console.log("CLIENT_SECRET:", clientSecret);
+
 const redirectUri = process.env.REDIRECT_URI;
+console.log("REDIRECT_URI:", redirectUri);
+
 const scopes = process.env.GRAPH_SCOPES;
+console.log("GRAPH_SCOPES:", scopes);
 
 const authority = `https://login.microsoftonline.com/${tenantId}`;
 const authorizeUrl = `${authority}/oauth2/v2.0/authorize`;

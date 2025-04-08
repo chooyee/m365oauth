@@ -1,7 +1,10 @@
 console.log(`Starting Server: ${process.env.NODE_ENV}`)
 if (process.env.NODE_ENV !== 'production') {
+  console.log("Loading .env file for development environment.");
   require('dotenv').config();
 }
+console.log(`Session secret: ${process.env.SESSION_SECRET}`)
+console.log(`Port: ${process.env.PORT}`)
 const express = require("express");
 const session = require('express-session');
 const http = require("http");
